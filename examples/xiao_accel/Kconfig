@@ -1,0 +1,6 @@
+config EXAMPLES_XIAO_ACCEL
+	tristate "XIAO nRF52840 Sense accelerometer example"
+	default n
+	---help---
+		Read accelerometer values from /dev/accel0.
+
