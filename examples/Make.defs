@@ -21,3 +21,8 @@
 ############################################################################
 
 include $(wildcard $(APPDIR)/examples/*/Make.defs)
+
+ifneq ($(CONFIG_EXAMPLES_XIAO_ACCEL),)
+CONFIGURED_APPS += $(APPDIR)/examples/xiao_accel
+endif
+
