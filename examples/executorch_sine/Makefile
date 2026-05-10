@@ -15,6 +15,7 @@ STACKSIZE = $(CONFIG_EXAMPLES_EXECUTORCH_SINE_STACKSIZE)
 MODULE    = $(CONFIG_EXAMPLES_EXECUTORCH_SINE)
 
 MAINSRC = executorch_sine_main.cc
+CSRCS = executorch_sine_math.c
 CXXSRCS = executorch_sine_kernels.cc
 
 EXECUTORCH_LIBS := \
