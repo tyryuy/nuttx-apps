@@ -1,0 +1,36 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+#pragma once
+
+/*
+ * ExecuTorch public headers include <cstdlib>.  With the NuttX app build,
+ * libstdc++'s <cstdlib> includes the toolchain's newlib stdlib.h, which
+ * conflicts with NuttX's own stdlib.h.  Keep these headers on the NuttX C
+ * library surface instead.
+ */
+
+#include <stdlib.h>
+
+#ifndef _STDLIB_H_
+#define _STDLIB_H_
+#endif
+
+namespace std
+{
+using ::abort;
+using ::atof;
+using ::atoi;
+using ::atol;
+using ::atoll;
+using ::calloc;
+using ::free;
+using ::malloc;
+using ::rand;
+using ::realloc;
+using ::strtod;
+using ::strtof;
+using ::strtol;
+using ::strtoll;
+using ::strtoul;
+using ::strtoull;
+}
