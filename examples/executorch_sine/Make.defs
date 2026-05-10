@@ -1,0 +1,53 @@
+############################################################################
+# apps/examples/executorch_sine/Make.defs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+############################################################################
+
+ifneq ($(CONFIG_EXAMPLES_EXECUTORCH_SINE),)
+EXECUTORCH_SINE_APPDIR := $(APPDIR)/examples/executorch_sine
+EXECUTORCH_LIBDIR := $(EXECUTORCH_SINE_APPDIR)/lib
+EXECUTORCH_SRCDIR := $(APPDIR)/..
+EXECUTORCH_REPODIR := $(EXECUTORCH_SRCDIR)/executorch
+
+CFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_SINE_APPDIR)/include
+CFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_SRCDIR)
+CFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_REPODIR)/runtime/core/portable_type/c10
+CFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_REPODIR)/third-party/flatcc/include
+CFLAGS += -DC10_USING_CUSTOM_GENERATED_MACROS
+CXXFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_SINE_APPDIR)/include
+CXXFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_SRCDIR)
+CXXFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_REPODIR)/runtime/core/portable_type/c10
+CXXFLAGS += ${INCDIR_PREFIX}$(EXECUTORCH_REPODIR)/third-party/flatcc/include
+CXXFLAGS += -DC10_USING_CUSTOM_GENERATED_MACROS
+
+EXTRA_LIBPATHS += -L$(EXECUTORCH_LIBDIR)
+
+EXTRA_LIBS += -lexecutorch
+EXTRA_LIBS += -lexecutorch_core
+EXTRA_LIBS += -lextension_runner_util
+EXTRA_LIBS += -lportable_ops_lib
+EXTRA_LIBS += -lportable_kernels
+EXTRA_LIBS += -lkernels_util_all_deps
+
+ifneq ($(CONFIG_EXECUTORCH_LINK_QUANTIZED),)
+EXTRA_LIBS += -lquantized_ops_lib
+EXTRA_LIBS += -lquantized_kernels
+endif
+
+ifneq ($(CONFIG_EXECUTORCH_LINK_CORTEX_M),)
+EXTRA_LIBS += -lcortex_m_ops_lib
+EXTRA_LIBS += -lcortex_m_kernels
+EXTRA_LIBS += -lcmsis-nn
+endif
+
+ifneq ($(CONFIG_EXECUTORCH_LINK_ETHOS_U),)
+EXTRA_LIBS += -lexecutorch_delegate_ethos_u
+endif
+
+EXTRA_LIBS += -lflatcc
+EXTRA_LIBS += -lflatccrt
+
+CONFIGURED_APPS += $(EXECUTORCH_SINE_APPDIR)
+endif

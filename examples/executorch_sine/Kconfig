@@ -1,0 +1,67 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_EXECUTORCH_SINE
+	tristate "ExecuTorch sine wave example"
+	default n
+	depends on HAVE_CXX
+	select EXECUTORCH_LINK_CORTEX_M
+	---help---
+		Enable an ExecuTorch sample app that runs an embedded sine wave
+		PTE model exported for the Cortex-M/CMSIS-NN backend.
+
+if EXAMPLES_EXECUTORCH_SINE
+
+config EXECUTORCH
+	bool
+	default y
+	---help---
+		Enable linking against prebuilt ExecuTorch static libraries staged
+		under apps/examples/executorch_sine/lib.
+
+if EXECUTORCH
+
+config EXECUTORCH_LINK_CORTEX_M
+	bool "Link Cortex-M kernels"
+	default y
+	---help---
+		Link the Cortex-M optimized ExecuTorch kernels and ops libraries.
+
+config EXECUTORCH_LINK_QUANTIZED
+	bool "Link quantized kernels"
+	default y
+	---help---
+		Link the quantized ExecuTorch kernels and ops libraries.
+
+config EXECUTORCH_LINK_ETHOS_U
+	bool "Link Ethos-U delegate"
+	default n
+	---help---
+		Link the Ethos-U delegate library. Keep this disabled for boards
+		without Ethos-U hardware, such as XIAO nRF52840 Sense.
+
+endif # EXECUTORCH
+
+config EXAMPLES_EXECUTORCH_SINE_PROGNAME
+	string "Program name"
+	default "executorch_sine"
+
+config EXAMPLES_EXECUTORCH_SINE_PRIORITY
+	int "ExecuTorch sine task priority"
+	default 100
+
+config EXAMPLES_EXECUTORCH_SINE_STACKSIZE
+	int "ExecuTorch sine stack size"
+	default 8192
+
+config EXAMPLES_EXECUTORCH_SINE_METHOD_ALLOCATOR_SIZE
+	int "Method allocator size"
+	default 65536
+
+config EXAMPLES_EXECUTORCH_SINE_PLANNED_BUFFER_SIZE
+	int "Planned memory buffer size"
+	default 32768
+
+endif
