@@ -8,6 +8,27 @@
 
 #include <nuttx/sensors/ioctl.h>
 
+static void print_mg_x10(int16_t raw)
+{
+  int32_t mg_x10;
+
+  /*
+   * The current legacy LSM6DSL setup uses +/-16g, approximately
+   * 0.488 mg/LSB.  Keep the display integer-only because this NuttX config
+   * does not enable floating-point printf formatting.
+   */
+
+  mg_x10 = ((int32_t)raw * 488 + (raw >= 0 ? 50 : -50)) / 100;
+
+  if (mg_x10 < 0)
+    {
+      putchar('-');
+      mg_x10 = -mg_x10;
+    }
+
+  printf("%ld.%01ld", (long)(mg_x10 / 10), (long)(mg_x10 % 10));
+}
+
 int main(int argc, char *argv[])
 {
   int fd;
@@ -38,15 +59,14 @@ int main(int argc, char *argv[])
           break;
         }
 
-      /*
-       * NuttX lsm6dsl legacy driver の read() は raw 16bit 値を返す。
-       * driver の初期設定が ±16g の場合、おおまかに 0.488 mg/LSB。
-       */
-      printf("accel raw: x=%6d y=%6d z=%6d  approx[mg]: x=%8.1f y=%8.1f z=%8.1f\n",
-             xyz[0], xyz[1], xyz[2],
-             xyz[0] * 0.488f,
-             xyz[1] * 0.488f,
-             xyz[2] * 0.488f);
+      printf("accel raw: x=%6d y=%6d z=%6d  approx[mg]: x=",
+             xyz[0], xyz[1], xyz[2]);
+      print_mg_x10(xyz[0]);
+      printf(" y=");
+      print_mg_x10(xyz[1]);
+      printf(" z=");
+      print_mg_x10(xyz[2]);
+      printf("\n");
 
       usleep(200000);
     }
@@ -55,4 +75,3 @@ int main(int argc, char *argv[])
   close(fd);
   return 0;
 }
-
